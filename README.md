@@ -7,10 +7,10 @@ FootBot is a robot driven by two independently controled motors, that aims to na
 
 ## Motor Controller
 
-A Proportional-Derivative motor controller makes use of data from the wheels' encoders in order to allow more precise control of the angular velocity of the wheel, and eliminate issues caused by: 
-* Disparity between the motors' strength 
-* Environment 
-* Battery degredation, etc. 
+A Proportional-Derivative motor controller makes use of data from the wheels' encoders in order to allow more precise control of the angular velocity of the wheel, and eliminate issues caused by:
+* Disparity between the motors' strength
+* Environment
+* Battery degredation, etc.
 
 An H-Bridge facilitates control of motor direction and PWM.
 
