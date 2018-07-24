@@ -13,13 +13,15 @@ We use a Pixy2 Camera to detect a brightly colored ball's position. Initially, t
 
 ## Authors
 
-[Sunil Madhow](https://github.com/SunilMadhow)
+[Sunil Madhow](https://github.com/SunilMadhow) <br/>
 [Blake Lazarine](https://github.com/BlakeLazarine)
 
 ## Acknowledgements
 
 Professor Joao Hespanha
 
-Sharad Shenkar
+Sharad Shankar
 
-Henrique
+Henrique Ferraz
+
+
