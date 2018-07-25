@@ -3,7 +3,7 @@ An Arduino-based footballing robot of prodigious skill
 
 FootBot is a robot driven by two independently controled motors, that aims to navigate a room to shoot a ball of random position into a goal of random position. This is accomplished by synthesizing visual imput from a Pixy camera and encoder readings to gather information on its surroundings and location.
 
-![Diagram](docs/im1.png)
+<img src = "docs/im1.png" height = 500 width = 500>
 
 ## Motor Controller
 
@@ -12,9 +12,9 @@ A Proportional-Derivative motor controller makes use of data from the wheels' en
 * Environment
 * Battery degredation, etc.
 
-An H-Bridge facilitates control of motor direction and PWM.
+An H-Bridge facilitates control of motor direction and PWM (wired as shown below).
 
-![Diagram setup](docs/im2.jpg)
+<img src = "docs/im2.jpg" height = 400 width = 600>
 
 ## Imaging
 
