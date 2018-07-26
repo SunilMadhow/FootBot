@@ -2,7 +2,8 @@
 #include <Pixy2.h>
 
 #define solenoid A5
-#define BAM digitalWrite(A5, HIGH); delay(300); digitalWrite(A5, LOW);
+#define BAM moveForward(4); digitalWrite(A5, HIGH); delay(300); digitalWrite(A5, LOW);
+#define secretDataType byte
 
 int defaultSpeed = 55;
 double leftPWMSpeed = 40;
@@ -43,9 +44,13 @@ int rightHead = 0;
 
 int ball_y = 0;
 
+//conversion of encoders to degrees
 int coF = 9000;
+                                                                                     
 long currentTime = 0;
 long previousTime = 0;
+
+//used for determining wheel velocities
 int timeHead = 0;
 double leftRates[20];
 double rightRates[20];
@@ -95,14 +100,12 @@ void setup() {
 
 int index;
 int mode = 0;
+
 void loop() {
 
   switch (mode) {
     case 0:
-      //search
-
-
-
+      //search mode 
       Serial.println("mode = 0");
 
       digitalWrite(in1, LOW);
@@ -111,7 +114,6 @@ void loop() {
       digitalWrite(in3, LOW);
       digitalWrite(in4, HIGH);
 
-      //int index;
       ballInSight = false;
 
       for (int i = 0; i < pixy.ccc.getBlocks(); i ++)
@@ -149,14 +151,23 @@ void loop() {
 
         Serial.print("mode = 1 ");
         Serial.println(prevY);
-        
 
+        
         if (pixy.ccc.getBlocks() <= 0)
         {
-          if (prevY > 150)
+          if (prevY > 200)
           {
             firstRight = true;
             firstLeft = true;
+//            for(int i = 5; i >= 0; i--)
+//            {
+//              pwmOutputA-=pwmOutputA/i;
+//              pwmOutputB-=pwmOutputB/i;
+//              analogWrite(pwmRight, pwmOutputA);
+//              analogWrite(pwmLeft, pwmOutputB);
+//              delay(100);
+//            }
+            
             mode = 2;
           }
 
@@ -166,8 +177,6 @@ void loop() {
         }
 
         int angle = 60 * (pixy.ccc.blocks[index].m_x / 316. ) - 30;
-
-        int desiredVel = 45;
 
         //        analogWrite(pwmRight, defaultSpeed);
         //        analogWrite(pwmLeft, defaultSpeed);
@@ -179,7 +188,7 @@ void loop() {
         double distanceConstantA = .1;
         double distanceConstantB = .16;
 
-        if (ball_y > 100)
+        if (ball_y > 150)
         {
           pwmOutputA -= ball_y * distanceConstantA;
           pwmOutputB -= ball_y * distanceConstantB;
@@ -204,26 +213,70 @@ void loop() {
 
         break;
       }
-    //hunt
 
     case 2:
-      //pounce
-
-      Serial.print("mode = 2");
-      analogWrite(pwmRight, 0);
-      analogWrite(pwmLeft, 0);
-      delay(2000);
-
-     
-
-      firstRight = false;
-      firstLeft = false;
+      {
+        //pounce
 
 
-      
-      break;
+        Serial.print("mode = 2");
+
+
+        firstRight = false;
+        firstLeft = false;
+        secretDataType goals = 0;
+        boolean weSeeDaBall = false;
+        int avgAngle = 0;
+
+        for (int i = 0; i < pixy.ccc.getBlocks(); i ++)
+        {
+          if (pixy.ccc.blocks[i].m_signature == 2)
+          {
+            index = i;
+            goals++;
+            avgAngle += 60 * (pixy.ccc.blocks[i].m_x / 316. ) - 30;
+          }
+
+          if (pixy.ccc.blocks[i].m_signature == 1)
+          {
+            weSeeDaBall = true;
+            ball_y = pixy.ccc.blocks[i].m_y;
+          }
+        }
+        avgAngle /= goals;
+
+        if (abs(avgAngle) > 5 || goals == 0)
+        {
+          moveRightWheel(240);
+          moveLeftWheel(150);
+//          analogWrite(pwmLeft, 60);
+//          analogWrite(pwmRight, 40);
+          
+          
+          if (weSeeDaBall)
+          {
+            mode = 1;
+            break;
+          }
+
+          firstRight = false;
+          firstLeft = false;
+        }
+
+        if (goals >= 2 && (ball_y > 190 || !weSeeDaBall))
+        {
+          mode = 3;
+        }
+
+
+
+        break;
+      }
     case 3:
       Serial.print("mode = 3");
+
+      BAM;//!!!!!!!!!
+
       break;
     default:
       break;
@@ -394,7 +447,7 @@ void moveForward(int distance) //inches
 
   analogWrite(pwmRight, 0);
   analogWrite(pwmLeft, 0);
-  
+
 }
 /*
   void huntMode()
