@@ -274,9 +274,11 @@ void loop() {
       }
     case 3:
       Serial.print("mode = 3");
-
+      
       BAM;//!!!!!!!!!
-
+      BAM;//!!!!!!!!!
+      delay(10000);
+      mode = 0;
       break;
     default:
       break;
