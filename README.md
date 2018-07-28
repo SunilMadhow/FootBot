@@ -14,7 +14,7 @@ A Proportional-Derivative motor controller makes use of data from the wheels' en
 
 An H-Bridge facilitates control of motor direction and PWM (wired as shown below).
 
-<img src = "docs/im2.jpg" height = 400 width = 600>
+<img src = "docs/im2.png" height = 400 width = 600>
 
 ## Imaging
 
