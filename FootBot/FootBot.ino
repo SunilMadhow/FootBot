@@ -219,7 +219,7 @@ void loop() {
         //pounce
 
 
-        Serial.print("mode = 2");
+        Serial.println("mode = 2");
 
 
         firstRight = false;
@@ -227,14 +227,17 @@ void loop() {
         secretDataType goals = 0;
         boolean weSeeDaBall = false;
         int avgAngle = 0;
-
+        int usefulThing = 999;
+        int anotherUsefulThing = 0;
         for (int i = 0; i < pixy.ccc.getBlocks(); i ++)
         {
           if (pixy.ccc.blocks[i].m_signature == 2)
           {
             index = i;
-            goals++;
             avgAngle += 60 * (pixy.ccc.blocks[i].m_x / 316. ) - 30;
+            goals++;
+            if(usefulThing == 999)
+              usefulThing = i;
           }
 
           if (pixy.ccc.blocks[i].m_signature == 1)
@@ -244,13 +247,15 @@ void loop() {
           }
         }
         avgAngle /= goals;
+        boolean seesBoth = abs(60 * (pixy.ccc.blocks[usefulThing].m_x/ 316. ) - 30 - avgAngle) > 3;
 
+        
         if (abs(avgAngle) > 5 || goals == 0)
         {
-          moveRightWheel(240);
-          moveLeftWheel(150);
-//          analogWrite(pwmLeft, 60);
-//          analogWrite(pwmRight, 40);
+//          moveRightWheel(240);
+//          moveLeftWheel(150);
+          analogWrite(pwmLeft, 54);
+          analogWrite(pwmRight, 34);
           
           
           if (weSeeDaBall)
@@ -262,8 +267,14 @@ void loop() {
           firstRight = false;
           firstLeft = false;
         }
+        Serial.print("     Goals: ");
+        Serial.print(goals);
+        Serial.print("     We see the ball: ");
+        Serial.print(weSeeDaBall);
+        Serial.print("     SeesBoth: ");
+        Serial.println(seesBoth);
 
-        if (goals >= 2 && (ball_y > 190 || !weSeeDaBall))
+        if (goals >= 2 && (ball_y > 190 || !weSeeDaBall) && seesBoth)
         {
           mode = 3;
         }
